@@ -1,13 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { ProdutoEntity } from './produto.entity';
 
 @Entity('produto_imagens')
-export class ProdutoImagem {
+export class ProdutoImagemEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ name: 'url', length: 100, nullable: false })
   url: string;
 
-  @Column({ nullable: false })
+  @Column({ name: 'descricao', length: 100, nullable: false })
   descricao: string;
+
+  @ManyToOne(() => ProdutoEntity, (produto) => produto.imagens, {
+    orphanedRowAction: 'delete',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  produto: ProdutoEntity;
 }
